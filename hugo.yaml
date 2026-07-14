@@ -1,0 +1,62 @@
+baseURL: "https://srinisrepo.github.io/"
+title: "Sriniketh Sunder"          # or whatever the masthead should say
+theme: PaperMod
+
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+pagination:
+  pagerSize: 10
+
+minify:
+  disableXML: true
+
+markup:
+  goldmark:
+    extensions:
+      passthrough:
+        enable: true
+        delimiters:
+          block:
+            - ['\[', '\]']
+            - ['$$', '$$']
+          inline:
+            - ['\(', '\)']
+            - ['$', '$']
+
+params:
+  social:
+    facebook_admin: ""
+  math: true
+  env: production
+  description: "Engineering notes on control, simulation, and space systems."
+  defaultTheme: auto        # follows the reader's OS dark/light setting
+  disableThemeToggle: false
+  ShowReadingTime: true
+  ShowPostNavLinks: true
+  ShowCodeCopyButtons: true
+  ShowShareButtons: false   # clutter
+  ShowBreadCrumbs: false    # clutter
+  ShowWordCount: false      # clutter
+  ShowRssButtonInSectionTermList: true
+  showtoc: true             # table of contents on posts — earns its place for long technical writing
+  tocopen: false
+  hideSummary: false
+  homeInfoParams:
+    Title: "Sriniketh"
+    Content: >
+      Engineering notes from building things: simulation, control,
+      autonomous systems. Reasoning included, failures included.
+
+menu:
+  main:
+    - identifier: posts
+      name: Posts
+      url: /posts/
+      weight: 10
+    - identifier: about
+      name: About
+      url: /about/
+      weight: 20
