@@ -1,6 +1,6 @@
 ---
 date: '2026-07-14T07:00:00+05:30'
-draft: true
+draft: false
 title: 'Kitchen Sink: Feature Test Page'
 description: "A throwaway page exercising every markdown, math, image, and diagram feature the site supports, so breakage shows up here instead of in a real post."
 ---
