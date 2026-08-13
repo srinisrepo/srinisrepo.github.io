@@ -2,6 +2,7 @@
 date: '2026-07-13T23:14:44+05:30'
 draft: true
 title: 'Rk4 Ascent Simulator'
+math: true
 ---
 
 The state propagates as $\dot{\mathbf{x}} = f(\mathbf{x}, t)$, and RK4 gives

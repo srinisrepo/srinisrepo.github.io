@@ -1,8 +1,9 @@
 ---
 date: '2026-07-14T07:00:00+05:30'
-draft: false
+draft: true
 title: 'Kitchen Sink: Feature Test Page'
 description: "A throwaway page exercising every markdown, math, image, and diagram feature the site supports, so breakage shows up here instead of in a real post."
+math: true
 ---
 
 This page is scaffolding, not writing — it exists to break in exactly the ways a real post would, before a real post does. Every section below maps to one feature the site is expected to support. Delete this post before going live (it stays `draft: true` for exactly that reason).

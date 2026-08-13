@@ -10,6 +10,9 @@ buildExpired: false
 pagination:
   pagerSize: 10
 
+taxonomies:
+  tag: tags
+
 minify:
   disableXML: true
 
@@ -29,7 +32,6 @@ markup:
 params:
   social:
     facebook_admin: ""
-  math: true
   env: production
   description: "Engineering notes on control, simulation, and space systems."
   defaultTheme: auto        # follows the reader's OS dark/light setting

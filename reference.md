@@ -52,14 +52,16 @@ date: 2026-07-20T10:00:00+05:30   # set by hugo new; edit if needed
 draft: true                        # THE publish switch. false = live on next push
 summary: "One-sentence hook shown on the list page. Write it last."
 tags: [simulation, control, numerical-methods]
-math: true                         # ONLY needed if the post contains LaTeX
+math: true                         # change the generated false value only when the post contains LaTeX
 showtoc: true                      # table of contents; default is true site-wide
 ---
 ```
 
 Notes:
-- `draft: true` posts appear locally with `hugo server -D` but **can never leak to production** (`buildDrafts: false` in CI).
-- `math: true` loads KaTeX for that page. Omit it on math-free posts — saves readers a script load.
+- `hugo new` generates `summary: ''`, `tags: []`, `math: false`, and `showtoc: true`; fill in only what the report needs.
+- `draft: true` posts appear locally with `hugo server -D` but are excluded from production (`buildDrafts: false` in CI).
+- A published post cannot link to a draft with `ref`. Publish the target too, or leave/remove that link; production deliberately fails instead of emitting a broken URL.
+- `math: true` loads KaTeX for that page. Leave the generated `math: false` value unchanged on math-free posts—it saves readers a script load.
 - `tags` are the only taxonomy. Reuse existing tags; don't invent a new tag per post or the tag pages become useless.
 - A post dated in the future won't publish until that date passes (`buildFuture: false`).
 
@@ -74,7 +76,7 @@ As derived in [the RK4 post]({{< ref "posts/rk4-ascent-simulator" >}}), the trun
 ```
 
 - The argument is the **folder path under `content/`**, no leading slash, no `.md` needed.
-- If the target doesn't exist (typo, renamed post), **the build fails and tells you**. This is the feature. Never hand-write `/posts/...` URLs — those rot silently.
+- If the target doesn't exist—or is still a draft while the linking post is published—the production build **fails and tells you**. This is the feature. Never hand-write `/posts/...` URLs; those rot silently.
 - Link to the about page: `{{< ref "about" >}}`.
 
 ### To a specific section (heading) of another post
@@ -298,7 +300,7 @@ Principles require revisiting old posts. Mechanically trivial:
 | Symptom | Cause → Fix |
 |---|---|
 | Pushed, site not updating | Check repo → **Actions** tab. Red? Open log, find the red step. Green but stale page? Wait 2 min, then hard-refresh `Ctrl+F5` |
-| Build fails: `REF_NOT_FOUND` | A `ref` shortcode points to a slug that doesn't exist. Error message names the file and line. Fix the path |
+| Build fails: `REF_NOT_FOUND` | A `ref` shortcode points to a missing post, or a published post points to a draft. The error names the file and line. Fix the path, remove the premature link, or publish the target too |
 | Post invisible on live site | `draft: true` still set, or `date:` in the future |
 | Post invisible even locally | Not running with `-D`, or file isn't named `index.md`, or folder isn't under `content/posts/` |
 | Math shows as raw `$..$` | `math: true` missing in front matter; or server not restarted after config edit |
@@ -325,7 +327,7 @@ hugo server -D
 
 1. **Never edit anything in `themes/PaperMod/`.** Extensions go in your own `layouts/partials/` (that's how the KaTeX hook works).
 2. **Never commit `public/`** — it's in `.gitignore`; keep it there.
-3. **Never unpin versions** (PaperMod `v7.0` submodule, Hugo `0.145.0` in `.github/workflows/hugo.yml` and on your machine). If you ever deliberately upgrade, change both Hugo versions together, verify locally, then push.
+3. **Never unpin versions** (PaperMod `v8.0` submodule, Hugo `0.145.0` in `.github/workflows/hugo.yml` and on your machine). If you ever deliberately upgrade, change both Hugo versions together, verify locally, then push.
 4. **Images: convert before commit.** The repo history keeps every byte forever — a deleted 5 MB photo still bloats every future clone.
 5. **URLs are permanent.** Never rename a published post's folder.
 6. The blog is infrastructure. Infrastructure time is capped at: reading this file.
