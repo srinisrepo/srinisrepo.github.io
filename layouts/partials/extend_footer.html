@@ -1,0 +1,114 @@
+<script>
+  (function () {
+    var menu = document.getElementById('menu');
+    var themeButton = document.getElementById('theme-toggle');
+
+    if (!menu || !themeButton) return;
+
+    var root = document.documentElement;
+    var control = document.createElement('li');
+    var buttons = document.createElement('div');
+    var settingsButton = document.createElement('button');
+    var panel = document.createElement('div');
+
+    control.className = 'appearance-control';
+    buttons.className = 'appearance-buttons';
+    settingsButton.type = 'button';
+    settingsButton.className = 'appearance-settings-toggle';
+    settingsButton.setAttribute('aria-label', 'Open appearance settings');
+    settingsButton.setAttribute('aria-expanded', 'false');
+    settingsButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6"/></svg>';
+
+    themeButton.setAttribute('aria-label', 'Toggle light and dark theme');
+    themeButton.setAttribute('title', 'Toggle light and dark theme (Alt + T)');
+
+    panel.className = 'appearance-panel';
+    panel.hidden = true;
+    panel.innerHTML = [
+      '<div class="appearance-panel-title">Appearance</div>',
+      '<div class="appearance-row appearance-dim-row">',
+      '  <span>Dim text 50%</span>',
+      '  <button type="button" class="appearance-switch" role="switch" aria-label="Dim dark-mode text to 50% brightness" aria-checked="false"></button>',
+      '</div>',
+      '<div class="appearance-row">',
+      '  <span>Typeface</span>',
+      '  <div class="appearance-choice" aria-label="Typeface">',
+      '    <button type="button" data-font="sans" aria-pressed="true">Sans</button>',
+      '    <button type="button" data-font="serif" aria-pressed="false">Serif</button>',
+      '  </div>',
+      '</div>'
+    ].join('');
+
+    buttons.appendChild(themeButton);
+    buttons.appendChild(settingsButton);
+    control.appendChild(buttons);
+    control.appendChild(panel);
+    menu.appendChild(control);
+
+    var dimRow = panel.querySelector('.appearance-dim-row');
+    var dimSwitch = panel.querySelector('.appearance-switch');
+    var fontButtons = panel.querySelectorAll('[data-font]');
+
+    function syncThemeState() {
+      var dark = document.body.classList.contains('dark');
+      dimRow.hidden = !dark;
+      themeButton.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+    }
+
+    function setDimText(enabled) {
+      root.classList.toggle('text-dim', enabled);
+      localStorage.setItem('dim-text', String(enabled));
+      dimSwitch.setAttribute('aria-checked', String(enabled));
+    }
+
+    function setFont(font) {
+      var serif = font === 'serif';
+      root.classList.toggle('font-serif', serif);
+      localStorage.setItem('font-style', serif ? 'serif' : 'sans');
+      fontButtons.forEach(function (button) {
+        button.setAttribute('aria-pressed', String(button.dataset.font === font));
+      });
+    }
+
+    function closePanel() {
+      panel.hidden = true;
+      settingsButton.setAttribute('aria-expanded', 'false');
+    }
+
+    setDimText(localStorage.getItem('dim-text') === 'true');
+    setFont(localStorage.getItem('font-style') === 'serif' ? 'serif' : 'sans');
+    syncThemeState();
+
+    themeButton.addEventListener('click', function () {
+      window.requestAnimationFrame(syncThemeState);
+    });
+
+    settingsButton.addEventListener('click', function () {
+      var opening = panel.hidden;
+      panel.hidden = !opening;
+      settingsButton.setAttribute('aria-expanded', String(opening));
+      if (opening) syncThemeState();
+    });
+
+    dimSwitch.addEventListener('click', function () {
+      setDimText(dimSwitch.getAttribute('aria-checked') !== 'true');
+    });
+
+    fontButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        setFont(button.dataset.font);
+      });
+    });
+
+    document.addEventListener('click', function (event) {
+      if (!control.contains(event.target)) closePanel();
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        closePanel();
+        settingsButton.focus();
+      }
+    });
+  }());
+</script>

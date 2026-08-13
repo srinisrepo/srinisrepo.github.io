@@ -11,8 +11,8 @@ Anything outside `content/` is not published, so this stays private to the repo.
 # 1. Scaffold a new post (creates a folder = page bundle)
 hugo new content posts/my-post-slug/index.md
 
-# 2. Write with live preview (auto-reloads on save)
-hugo server -D
+# 2. Write with live preview (auto-reloads on save; includes drafts)
+hugo server --buildDrafts --environment production
 # → http://localhost:1313
 
 # 3. When done: in the post's front matter, set
@@ -64,6 +64,7 @@ Notes:
 - `math: true` loads KaTeX for that page. Leave the generated `math: false` value unchanged on math-free posts—it saves readers a script load.
 - `tags` are the only taxonomy. Reuse existing tags; don't invent a new tag per post or the tag pages become useless.
 - A post dated in the future won't publish until that date passes (`buildFuture: false`).
+- Drafts show a small `DRAFT` badge in local preview; the badge and draft page are excluded from production.
 
 ---
 
@@ -229,6 +230,20 @@ $$
 
 ---
 
+## 4.1 Appearance controls
+
+The compact controls beside **About** are reader preferences saved in the browser:
+
+- The sun/moon button switches between light and dark themes. Dark mode uses a true-black background.
+- The sliders button opens **Appearance** settings.
+- **Dim text 50%** appears only in dark mode and lowers text brightness for easier reading.
+- **Sans** uses Geist (the default); **Serif** uses STIX Two Text.
+- These preferences affect only the current browser. They do not change the repository or published output.
+
+The visual system is shared across both themes: consistent borders, radii, code blocks, tags, TOC, and post navigation. Code blocks use a near-black surface in both themes; the light theme keeps the surrounding page white.
+
+---
+
 ## 5. Code blocks
 
 Always specify the language for syntax highlighting:
@@ -244,6 +259,7 @@ def rk4_step(f, t, x, h):
 - Inline code: backticks — `` `hugo server -D` ``.
 - Languages you'll use: `python`, `cpp`, `yaml`, `powershell`, `text` (for plain output).
 - Readers get a copy button automatically (`ShowCodeCopyButtons: true`).
+- Code blocks use a dark, rounded surface in both themes; inline code uses a smaller rounded neutral chip.
 - Long listings: show the interesting 20 lines in the post, link the full file
   (GitHub repo link) — a post is not a code dump.
 
@@ -330,4 +346,5 @@ hugo server -D
 3. **Never unpin versions** (PaperMod `v8.0` submodule, Hugo `0.145.0` in `.github/workflows/hugo.yml` and on your machine). If you ever deliberately upgrade, change both Hugo versions together, verify locally, then push.
 4. **Images: convert before commit.** The repo history keeps every byte forever — a deleted 5 MB photo still bloats every future clone.
 5. **URLs are permanent.** Never rename a published post's folder.
-6. The blog is infrastructure. Infrastructure time is capped at: reading this file.
+6. **Keep visual extensions outside the theme.** Site-specific appearance lives in `assets/css/extended/custom.css` and `layouts/partials/extend_*.html`; never edit `themes/PaperMod/` for styling changes.
+7. The blog is infrastructure. Infrastructure time is capped at: reading this file.
